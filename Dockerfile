@@ -45,3 +45,9 @@ RUN conda install --quiet --yes \
     'r-hexbin=1.27*' && \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR
+
+# Install hdf5r for Seurat and Seurat itself
+# FIXME Don't hardcode CRAN mirrors
+RUN export CRAN_MIRROR="https://cloud.r-project.org/" \
+ && Rscript -e "install.packages(\"hdf5r\", configure.args=\"--with-hdf5=/usr/bin/h5cc\", repos=\"${CRAN_MIRROR}\")" \
+ && Rscript -e "install.packages(\"Seurat\", repos=\"${CRAN_MIRROR}\")"
